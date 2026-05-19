@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+google-cloud-bigquery
+pandas
+scikit-learn
+db-dtypes
+google-cloud-bigquery-storage
+pyarrow

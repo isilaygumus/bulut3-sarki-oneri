@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Şarkı Öneri Sistemi</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 50px; background-color: #f4f6f9; color: #333; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #2c3e50; margin-top: 0; }
+        input { padding: 12px; width: calc(100% - 130px); border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        button { padding: 12px 24px; cursor: pointer; background-color: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; transition: background 0.2s; }
+        button:hover { background-color: #2563eb; }
+        ul { margin-top: 25px; padding-left: 0; list-style: none; }
+        li { padding: 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; border-radius: 4px; margin-bottom: 8px; }
+        li:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2> Şarkı Önerisi Al</h2>
+        <input type="text" id="sarki_adi" placeholder="bir şarkı girin">
+        <button onclick="sarki_bul()">Bul</button>
+
+        <ul id="sonuclar"></ul>
+    </div>
+
+    <script>
+        async function sarki_bul() {
+            const sarki = document.getElementById('sarki_adi').value;
+            const liste = document.getElementById('sonuclar');
+            if(!sarki) return;
+            
+            liste.innerHTML = "<li> Şarkılar analiz ediliyor, lütfen bekleyin...</li>";
+
+            try {
+                // HTML ve API aynı sunucuda olduğu için artık uzun uzun URL yazmaya gerek yok!
+                const response = await fetch(`/oner/${encodeURIComponent(sarki)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    liste.innerHTML = "";
+                    if (data.oneriler && data.oneriler.length > 0) {
+                        data.oneriler.forEach(s => {
+                            let li = document.createElement('li');
+                            li.innerText = s;
+                            liste.appendChild(li);
+                        });
+                    } else {
+                        liste.innerHTML = "<li> bu şarkı bulunamadı.</li>";
+                    }
+                }
+            } catch (error) {
+                liste.innerHTML = "<li>Hata</li>";
+            }
+        }
+    </script>
+
+</body>
+</html>
