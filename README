@@ -1,0 +1,28 @@
+Bulut Tabanlı Akıllı Şarkı Öneri Sistemi
+
+Proje Amacı ve Kapsamı
+Projenin temel amacı, büyük bir veri setini lokal ortam yerine bulut veritabanlarında barındırmak ve bu veriyi gerçek zamanlı olarak çekerek makine öğrenmesi modelleriyle analiz etmektir. 
+
+Sistem şu üç temel "Bulut Bilişim" kriterini başarıyla sağlamaktadır:
+1. Bulut Üzerinde Veri Saklama ve Yönetimi: Veriler Google Cloud BigQuery üzerinde barındırılmaktadır.
+2. Akıllı Veri Analitiği: Veriden bilgi çıkarma ve makine öğrenmesi ile önerilerde bulunma işlemleri anlık olarak yapılmaktadır.
+3. Konteynerizasyon ve Dağıtım: Tüm sistem Docker üzerinde izole edilerek bulut platformlarında (Cloud Run/Shell) çalışmaya hazır hale getirilmiştir.
+
+Sistem Mimarisi ve Çalışma Mantığı
+Uygulama, veri akışını ve analizi şu adımlarla gerçekleştirir:
+
+1.İstek (Request): Kullanıcı, HTML/CSS ile hazırlanmış arayüz üzerinden bir şarkı ismi girer.
+2.Veritabanı Sorgusu (BigQuery): Python (FastAPI) tabanlı backend, Google Cloud BigQuery'ye bağlanır ve yaklaşık 30 MB boyutundaki müzik veri setini `google-cloud-bigquery-storage` kütüphanesi yardımıyla hafızaya (Pandas DataFrame) çeker.
+3.Makine Öğrenmesi (Scikit-learn): Çekilen veriler üzerinden `Cosine Similarity` (Kosinüs Benzerliği) algoritması çalıştırılır. Şarkıların akustik özellikleri, temposu, enerjisi gibi metrikler vektörel olarak karşılaştırılarak en yüksek benzerlik skoruna sahip şarkılar tespit edilir.
+4.Yanıt (Response): Bulunan en iyi eşleşmeler, API üzerinden JSON formatında frontend'e iletilir ve kullanıcıya sunulur.
+
+Kullanılan Teknolojiler
+* Backend Framework: Python 3.10+, FastAPI, Uvicorn
+* Makine Öğrenmesi & Veri İşleme: Scikit-learn, Pandas, PyArrow
+* Bulut Veritabanı: Google Cloud BigQuery
+* Altyapı ve Dağıtım: Docker, Google Cloud Shell
+* Frontend: HTML5, CSS, Vanilla JavaScript
+
+Kurulum ve Çalıştırma
+
+Projeyi çalıştırmak için sisteminizde Docker'ın kurulu olması ve Google Cloud erişim yetkilerine (Credentials) sahip olunması gerekmektedir.
